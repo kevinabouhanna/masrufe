@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Claude_Preview__preview_start",
+      "Bash(node --check api/whatsapp.js)",
+      "Bash(node -e \"JSON.parse\\(require\\('fs'\\).readFileSync\\('vercel.json'\\)\\)\")",
+      "Bash(node -e \"const f=require\\('fs'\\).readFileSync\\('.claude/launch.json','utf8'\\);JSON.parse\\(f\\);console.log\\('launch.json OK'\\)\")",
+      "Bash(node -e ' *)",
+      "Bash(node --check /tmp/landing.js)",
+      "Bash(node --check /tmp/app.js)"
+    ]
+  }
+}
