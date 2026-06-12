@@ -28,9 +28,9 @@ guides in order the first time.
 |------|------|
 | `index.html` | Marketing landing page + auth (served at `/`) |
 | `app.html` | The tracker, gated behind sign-in (served at `/app`) |
-| `api/whatsapp.js` | Vercel serverless function — WhatsApp webhook |
+| `api/whatsapp.mjs` | Vercel serverless function — WhatsApp webhook |
 | `supabase-schema.sql` | Database tables + Row Level Security |
-| `vercel.json` | Function runtime + `/app` rewrite |
+| `vercel.json` | `cleanUrls` — serves `app.html` at `/app` |
 
 Visitors land on `index.html`, sign in (magic link or Google), and are sent to
 `/app`. The app verifies the session on load and bounces back to `/` if signed

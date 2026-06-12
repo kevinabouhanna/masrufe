@@ -27,9 +27,9 @@ version:
 .
 ├── index.html            ← marketing landing + auth (served at /)
 ├── app.html              ← the tracker, gated behind sign-in (served at /app)
-├── api/whatsapp.js       ← Vercel serverless function (WhatsApp webhook)
+├── api/whatsapp.mjs       ← Vercel serverless function (WhatsApp webhook)
 ├── supabase-schema.sql   ← run once in the Supabase SQL editor
-├── vercel.json           ← function runtime + /app rewrite
+├── vercel.json           ← cleanUrls (serves app.html at /app)
 └── docs/                 ← setup & usage guides
 ```
 

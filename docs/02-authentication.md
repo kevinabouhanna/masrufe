@@ -32,18 +32,19 @@ In Supabase → **Authentication → URL Configuration**:
 - **Site URL:** your deployed origin, e.g. `https://masrufe.vercel.app`
 - **Redirect URLs** (add each):
   ```
-  https://masrufe.vercel.app/app.html
-  http://localhost:4321/app.html        ← for local testing
+  https://masrufe.vercel.app/app
+  http://localhost:3000/app             ← for local `vercel dev` testing
   ```
 
-Use whatever origin you actually deploy to. If you test locally with a different
-port, add that one too.
+Use whatever origin you actually deploy to. The app lives at the clean URL
+`/app` (Vercel serves `app.html` there via `cleanUrls`). Locally, run
+`vercel dev` so `/app` resolves the same way.
 
 ## How it flows in the app
 
 - The landing page (`index.html`) opens an auth modal. Magic link calls
-  `signInWithOtp({ emailRedirectTo: <origin>/app.html })`; Google calls
-  `signInWithOAuth({ provider: 'google', redirectTo: <origin>/app.html })`.
+  `signInWithOtp({ emailRedirectTo: <origin>/app })`; Google calls
+  `signInWithOAuth({ provider: 'google', redirectTo: <origin>/app })`.
 - `app.html` checks the session on load. **No session → redirect to `/`.** When
   signed in, it shows the user's email and a sign-out button, and every database
   request carries the user's JWT so RLS scopes data to that user.

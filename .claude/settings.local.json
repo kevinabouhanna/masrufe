@@ -7,7 +7,11 @@
       "Bash(node -e \"const f=require\\('fs'\\).readFileSync\\('.claude/launch.json','utf8'\\);JSON.parse\\(f\\);console.log\\('launch.json OK'\\)\")",
       "Bash(node -e ' *)",
       "Bash(node --check /tmp/landing.js)",
-      "Bash(node --check /tmp/app.js)"
+      "Bash(node --check /tmp/app.js)",
+      "Bash(git -C /Users/kevinabouhanna/Personal/masrufe mv api/whatsapp.js api/whatsapp.mjs)",
+      "Bash(node --check api/whatsapp.mjs)",
+      "Bash(node --check /tmp/idx.js)",
+      "Bash(node -e \"JSON.parse\\(require\\('fs'\\).readFileSync\\('vercel.json'\\)\\);console.log\\('vercel.json valid'\\)\")"
     ]
   }
 }

@@ -1,7 +1,7 @@
 # 4. Deployment (Vercel)
 
 Masrufe is a static site (`index.html`, `app.html`) plus one serverless function
-(`api/whatsapp.js`). It's built for the Vercel free tier.
+(`api/whatsapp.mjs`). It's built for the Vercel free tier.
 
 ## Deploy
 
@@ -14,9 +14,10 @@ vercel --prod     # promote to production
 ```
 
 Vercel automatically:
-- serves `index.html` at `/` and `app.html` at `/app` (via the rewrite in
-  [`vercel.json`](../vercel.json)),
-- builds `api/whatsapp.js` as a Node 20 function at `/api/whatsapp`.
+- serves `index.html` at `/` and `app.html` at `/app` (via `cleanUrls` in
+  [`vercel.json`](../vercel.json) — `.html` URLs redirect to their clean form),
+- builds `api/whatsapp.mjs` as a Node function at `/api/whatsapp` (zero-config —
+  no runtime needs to be declared).
 
 ## Environment variables
 
@@ -33,7 +34,8 @@ so the function picks them up.
 1. Go back to [Authentication](02-authentication.md) and make sure your
    **production** URL (e.g. `https://masrufe.vercel.app/app.html`) is in the
    Supabase redirect allow-list and Site URL.
-2. Visit `/`, sign in, and confirm you land on `/app`.
+2. Visit `/`, sign in, and confirm you land on `/app` (e.g.
+   `https://masrufe.vercel.app/app`).
 3. (Optional) Set up [WhatsApp](05-whatsapp.md).
 
 ## Routes
