@@ -11,7 +11,11 @@
       "Bash(git -C /Users/kevinabouhanna/Personal/masrufe mv api/whatsapp.js api/whatsapp.mjs)",
       "Bash(node --check api/whatsapp.mjs)",
       "Bash(node --check /tmp/idx.js)",
-      "Bash(node -e \"JSON.parse\\(require\\('fs'\\).readFileSync\\('vercel.json'\\)\\);console.log\\('vercel.json valid'\\)\")"
+      "Bash(node -e \"JSON.parse\\(require\\('fs'\\).readFileSync\\('vercel.json'\\)\\);console.log\\('vercel.json valid'\\)\")",
+      "Bash(awk 'NR>=44 && NR<=46 {print NR\": \"$0} NR>=576 && NR<=605 {print NR\": \"$0}' index.html)",
+      "Bash(awk 'NR>=45 && NR<=48 {print NR\": \"$0}' app.html)",
+      "Bash(sed -i '' 's/color: white;/color: var\\(--on-primary\\);/g' index.html app.html)",
+      "Bash(sed -i '' 's/      padding-top: var\\(--space-8\\);/      padding-top: 56px; \\\\/* 40px circle + 16px gap *\\\\//' index.html)"
     ]
   }
 }

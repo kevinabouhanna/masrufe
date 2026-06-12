@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Masrufe — Expense Tracker</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
   <!-- Fonts: Satoshi (body) + General Sans (headings) via Fontshare -->
   <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
@@ -47,6 +48,10 @@
 
       --font-body: 'Satoshi', system-ui, -apple-system, sans-serif;
       --font-head: 'General Sans', var(--font-body);
+
+      /* Text/icon colour on top of the teal --primary background. Kept dark in
+         BOTH themes for accessible contrast (white-on-teal fails WCAG AA). */
+      --on-primary: oklch(0.20 0.02 200);
     }
 
     /* Light mode — warm beige surfaces, teal accent */
@@ -156,7 +161,7 @@
       background: linear-gradient(135deg, var(--primary), var(--primary-strong));
       display: grid;
       place-items: center;
-      color: white;
+      color: var(--on-primary);
       font-weight: 900;
       font-size: 1.1rem;
       font-family: var(--font-head);
@@ -246,7 +251,7 @@
       border-radius: 50%;
       flex-shrink: 0;
       background: linear-gradient(135deg, var(--primary), var(--primary-strong));
-      color: white;
+      color: var(--on-primary);
       display: grid;
       place-items: center;
       font-weight: 700;
@@ -464,7 +469,7 @@
 
     .btn-primary {
       background: var(--primary);
-      color: white;
+      color: var(--on-primary);
       font-weight: 600;
       padding: var(--space-3) var(--space-5);
       border-radius: var(--radius-md);
@@ -779,7 +784,7 @@
 
     .toggle-group button.active {
       background: var(--primary);
-      color: white;
+      color: var(--on-primary);
     }
 
     .modal-actions {
@@ -881,7 +886,7 @@
 
     .btn-mini.primary {
       background: var(--primary);
-      color: white;
+      color: var(--on-primary);
       border-color: transparent;
     }
 
