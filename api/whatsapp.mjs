@@ -129,16 +129,12 @@ async function parseWithOpenRouter(text, categories) {
       'X-Title': 'Masrufe',
     },
     body: JSON.stringify({
-      // OpenRouter fallback routing: it tries these in order and skips any that
-      // are rate-limited or down (max 3 entries). We lead with free models, then
-      // fall back to a tiny paid model (~$0.0001/req) so a message is never
-      // dropped just because the free tier is busy. For STRICTLY free, replace the
-      // last entry with another ':free' model (e.g. 'meta-llama/llama-3.2-3b-instruct:free').
-      models: [
-        'meta-llama/llama-3.3-70b-instruct:free',
-        'qwen/qwen3-next-80b-a3b-instruct:free',
-        'meta-llama/llama-3.1-8b-instruct',
-      ],
+      // Cheap, reliable model (~$0.0001/req) that returns clean JSON for this
+      // short structured task. The ':free' variants exist but are heavily
+      // rate-limited (429) on a low-credit account, so we use the paid 8B model.
+      // For better accuracy on ambiguous messages, upgrade to 'openai/gpt-4o-mini'
+      // or 'anthropic/claude-3.5-haiku'.
+      model: 'meta-llama/llama-3.1-8b-instruct',
       messages: [
         { role: 'system', content: systemPrompt(categories) },
         { role: 'user', content: text },
