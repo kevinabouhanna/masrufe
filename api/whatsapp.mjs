@@ -1,10 +1,11 @@
-// Vercel serverless function: Meta WhatsApp Business webhook -> Perplexity parse -> Supabase insert -> reply.
+// Vercel serverless function: Meta WhatsApp Business webhook -> OpenRouter parse -> Supabase insert -> reply.
 //
 // Required env vars:
-//   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, PERPLEXITY_API_KEY,
+//   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, OPENROUTER_API_KEY,
 //   WHATSAPP_TOKEN, WHATSAPP_PHONE_NUMBER_ID, WHATSAPP_VERIFY_TOKEN
 // Optional:
 //   WHATSAPP_APP_SECRET  (Meta App Secret; if set, X-Hub-Signature-256 is verified)
+//   NEXT_PUBLIC_APP_URL  (sent as HTTP-Referer to OpenRouter)
 //
 // ROUTING: the data model is per-user with RLS, but a webhook has no logged-in
 // session. So this function uses the SERVICE ROLE key (which bypasses RLS) and
@@ -118,28 +119,48 @@ async function getCategories(userId) {
   return names.length ? names : DEFAULT_CATEGORIES;
 }
 
-async function parseWithPerplexity(text, categories) {
-  const res = await fetch('https://api.perplexity.ai/chat/completions', {
+async function parseWithOpenRouter(text, categories) {
+  const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${process.env.PERPLEXITY_API_KEY}`,
+      Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
       'Content-Type': 'application/json',
+      'HTTP-Referer': process.env.NEXT_PUBLIC_APP_URL ?? 'https://localhost:3000',
+      'X-Title': 'Masrufe',
     },
     body: JSON.stringify({
-      model: 'sonar',
+      model: 'meta-llama/llama-3.3-8b-instruct:free',
       messages: [
         { role: 'system', content: systemPrompt(categories) },
         { role: 'user', content: text },
       ],
+      response_format: { type: 'json_object' },
       temperature: 0,
+      max_tokens: 200,
     }),
   });
+
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`OpenRouter error ${res.status}: ${err}`);
+  }
+
   const data = await res.json();
   const content = data?.choices?.[0]?.message?.content || '';
-  const match = content.match(/\{[\s\S]*\}/);
-  if (!match) throw new Error(`Could not parse JSON from model output: ${content}`);
-  const obj = JSON.parse(match[0]);
-  if (!categories.includes(obj.category)) obj.category = categories.includes('Other') ? 'Other' : categories[0];
+
+  // json_object mode returns clean JSON, but fall back to regex just in case
+  let obj;
+  try {
+    obj = JSON.parse(content);
+  } catch {
+    const match = content.match(/\{[\s\S]*\}/);
+    if (!match) throw new Error(`Could not parse JSON from model output: ${content}`);
+    obj = JSON.parse(match[0]);
+  }
+
+  if (!categories.includes(obj.category)) {
+    obj.category = categories.includes('Other') ? 'Other' : categories[0];
+  }
   return obj;
 }
 
@@ -252,7 +273,7 @@ export default async function handler(req, res) {
 
         // 3) Parse + insert against this user's rate and categories.
         const [rate, categories] = await Promise.all([getRate(userId), getCategories(userId)]);
-        const parsed = await parseWithPerplexity(text, categories);
+        const parsed = await parseWithOpenRouter(text, categories);
         const { amountLbp, currency } = await insertExpense(userId, parsed, rate);
 
         let confirmation = `✅ Added: ${parsed.source} — ${parsed.category} — LBP ${fmt(amountLbp)}`;

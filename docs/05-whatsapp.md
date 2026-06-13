@@ -5,8 +5,8 @@ Log expenses by texting a casual message to your WhatsApp number, e.g.:
 > Toters 45k groceries x2 chips
 > $20 Claude pro subscription
 
-The serverless function parses it with Perplexity, converts to LBP, stores it,
-and replies with a confirmation.
+The serverless function parses it with an LLM (OpenRouter, free model),
+converts to LBP, stores it, and replies with a confirmation.
 
 ## Per-user routing (how messages reach the right account)
 
@@ -47,9 +47,9 @@ list. Messages from an unknown number get a friendly "connect first" reply.
 1. Create a **Meta app** with the **WhatsApp** product and get a **permanent
    access token** and your **Phone number ID**.
 2. Set these env vars in Vercel (see [Configuration](03-configuration.md)):
-   `SUPABASE_SERVICE_ROLE_KEY`, `PERPLEXITY_API_KEY`, `WHATSAPP_TOKEN`,
+   `SUPABASE_SERVICE_ROLE_KEY`, `OPENROUTER_API_KEY`, `WHATSAPP_TOKEN`,
    `WHATSAPP_PHONE_NUMBER_ID`, `WHATSAPP_VERIFY_TOKEN`, and optionally
-   `WHATSAPP_APP_SECRET`.
+   `WHATSAPP_APP_SECRET` and `NEXT_PUBLIC_APP_URL`.
 3. In Meta → **WhatsApp → Configuration → Webhook**:
    - **Callback URL:** `https://<your-app>/api/whatsapp`
    - **Verify token:** the same string you set as `WHATSAPP_VERIFY_TOKEN`

@@ -34,11 +34,12 @@ settings for deployment):
 | `SUPABASE_URL` | Supabase → Settings → API | same as frontend |
 | `SUPABASE_ANON_KEY` | Supabase → Settings → API | same as frontend |
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Settings → API | **secret**, bypasses RLS |
-| `PERPLEXITY_API_KEY` | perplexity.ai API settings | parses WhatsApp messages |
+| `OPENROUTER_API_KEY` | openrouter.ai → Keys | parses WhatsApp messages (free model) |
 | `WHATSAPP_TOKEN` | Meta → WhatsApp | permanent access token |
 | `WHATSAPP_PHONE_NUMBER_ID` | Meta → WhatsApp | your number's ID |
 | `WHATSAPP_VERIFY_TOKEN` | you invent it | any random string |
 | `WHATSAPP_APP_SECRET` | Meta → App settings | optional; verifies signatures |
+| `NEXT_PUBLIC_APP_URL` | your deployed URL | optional; HTTP-Referer for OpenRouter |
 
 `.env` is git-ignored. Only the frontend `SUPABASE_URL` / anon key are ever
 shipped to the browser; everything else stays server-side.
