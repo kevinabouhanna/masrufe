@@ -91,9 +91,28 @@ async function findUserByPhone(phone) {
 }
 
 // If `code` matches a pending link code, bind it to this phone and return user_id.
+// Sending a valid code from a number always (re)assigns it to the code's owner —
+// so the same WhatsApp number can be moved to a different account just by
+// connecting again. (Safe: you can only do this from a number you control.)
 async function tryConsumeLinkCode(code, phone) {
-  const url = `${SUPABASE_URL}/rest/v1/whatsapp_links?link_code=eq.${encodeURIComponent(code)}`;
-  const res = await fetch(url, {
+  // Verify the code matches a pending link first.
+  const lookup = await fetch(
+    `${SUPABASE_URL}/rest/v1/whatsapp_links?link_code=eq.${encodeURIComponent(code)}&select=user_id`,
+    { headers: sbHeaders() }
+  );
+  const found = await lookup.json();
+  if (!found?.[0]?.user_id) return null;
+
+  // Free this phone from any other account it's currently linked to, so the
+  // unique-phone constraint doesn't block re-linking.
+  await fetch(`${SUPABASE_URL}/rest/v1/whatsapp_links?phone=eq.${encodeURIComponent(phone)}`, {
+    method: 'PATCH',
+    headers: sbHeaders({ Prefer: 'return=minimal' }),
+    body: JSON.stringify({ phone: null }),
+  });
+
+  // Bind the phone to the code's owner and clear the code.
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/whatsapp_links?link_code=eq.${encodeURIComponent(code)}`, {
     method: 'PATCH',
     headers: sbHeaders({ Prefer: 'return=representation' }),
     body: JSON.stringify({ phone, link_code: null }),
