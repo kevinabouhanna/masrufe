@@ -129,7 +129,12 @@ async function parseWithOpenRouter(text, categories) {
       'X-Title': 'Masrufe',
     },
     body: JSON.stringify({
-      model: 'meta-llama/llama-3.3-8b-instruct:free',
+      // NOTE: 'meta-llama/llama-3.3-8b-instruct:free' (from the spec) does NOT exist —
+      // Llama 3.3 only ships as 70B. The ':free' models that do exist are heavily
+      // rate-limited (429) and drop messages. This 8B model is ~$0.0001/req and
+      // reliable. To go strictly free instead, swap in
+      // 'meta-llama/llama-3.3-70b-instruct:free' (expect occasional 429s under load).
+      model: 'meta-llama/llama-3.1-8b-instruct',
       messages: [
         { role: 'system', content: systemPrompt(categories) },
         { role: 'user', content: text },

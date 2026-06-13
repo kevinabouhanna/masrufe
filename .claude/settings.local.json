@@ -15,7 +15,11 @@
       "Bash(awk 'NR>=44 && NR<=46 {print NR\": \"$0} NR>=576 && NR<=605 {print NR\": \"$0}' index.html)",
       "Bash(awk 'NR>=45 && NR<=48 {print NR\": \"$0}' app.html)",
       "Bash(sed -i '' 's/color: white;/color: var\\(--on-primary\\);/g' index.html app.html)",
-      "Bash(sed -i '' 's/      padding-top: var\\(--space-8\\);/      padding-top: 56px; \\\\/* 40px circle + 16px gap *\\\\//' index.html)"
+      "Bash(sed -i '' 's/      padding-top: var\\(--space-8\\);/      padding-top: 56px; \\\\/* 40px circle + 16px gap *\\\\//' index.html)",
+      "Bash(curl -s -o /dev/null -w \"status=%{http_code} type=%{content_type}\\\\n\" https://masrufe.vercel.app/favicon.svg)",
+      "Bash(curl -s -o /dev/null -w \"status=%{http_code}\\\\n\" \"https://masrufe.vercel.app/api/whatsapp?hub.mode=subscribe&hub.verify_token=wrongtoken&hub.challenge=test123\")",
+      "Bash(curl -s \"https://openrouter.ai/api/v1/models\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('CONTENT:', repr\\(d.get\\('choices',[{}]\\)[0].get\\('message',{}\\).get\\('content'\\)\\)\\); print\\('ERROR:', d.get\\('error'\\)\\)\")"
     ]
   }
 }
